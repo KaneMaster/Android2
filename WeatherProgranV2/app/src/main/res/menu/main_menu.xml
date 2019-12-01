@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_choose_city"
+        android:title="@string/menu_choose_city"
+        android:icon="@drawable/buildings8_42510"
+        app:showAsAction="always">
+    </item>
+    <group>
+    <item
+        android:id="@+id/menu_off_wind"
+        android:title="@string/menu_off_wind"
+        android:checkable="true"
+        android:checked="true"
+        ></item>
+    <item
+        android:id="@+id/menu_off_pressure"
+        android:title="@string/menu_off_pressure"
+        android:checkable="true"
+        android:checked="true"
+        ></item>
+    <item
+        android:id="@+id/menu_off_wet"
+        android:title="@string/menu_off_wet"
+        android:checkable="true"
+        android:checked="true"
+        ></item>
+    </group>
+</menu>

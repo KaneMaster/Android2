@@ -1,0 +1,20 @@
+
+<resources>
+    <style name="WeatherPanelText">
+        <item name="android:textColor">@color/panelTextColor</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">35sp</item>
+    </style>
+    <style name="MainTitle">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/mainTitleColor</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingBottom">20dp</item>
+    </style>
+    <style name="SubTitle" parent="MainText">
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+</resources>

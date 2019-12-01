@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Погодная программа</string>
+    <string name="label_city">Выберите город</string>
+    <string name="city_label">Город</string>
+    <string name="label_wind">Скорость ветра</string>
+    <string name="label_pressure">Давление</string>
+    <string name="label_wet">Влажность</string>
+    <string name="val_wind">5 м/с</string>
+    <string name="val_pressure">765 мм.рт.ст.</string>
+    <string name="val_wet">65 %</string>
+    <string name="menu_choose_city">Выбрать город</string>
+    <string name="menu_off_wind">Отображать скорость ветра</string>
+    <string name="menu_off_pressure">Отображать давление</string>
+    <string name="menu_off_wet">Отображать влажность</string>
+    <string name="label_character">Дополнительная информация</string>
+    <string name="menu_about">О разработчиках</string>
+    <string name="menu_send">Обратная связь</string>
+    <string name="creator1">Менеджер проекта</string>
+    <string name="creator1_fio">Иванов И.И.</string>
+    <string name="creator1_tel">Телефон для связи: 98-98-31</string>
+    <string name="creator1_email">e_mail: big_boss@mail.ru</string>
+    <string name="about_company">ОАО \"Веселый роджер\"</string>
+</resources>
