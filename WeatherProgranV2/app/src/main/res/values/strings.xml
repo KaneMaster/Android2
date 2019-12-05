@@ -20,4 +20,5 @@
     <string name="creator1_tel">Телефон для связи: 98-98-31</string>
     <string name="creator1_email">e_mail: big_boss@mail.ru</string>
     <string name="about_company">ОАО \"Веселый роджер\"</string>
+    <string name="no_sensor">Датчик отсутствует</string>
 </resources>

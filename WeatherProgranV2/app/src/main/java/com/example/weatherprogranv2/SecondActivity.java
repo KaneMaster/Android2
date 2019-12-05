@@ -1,9 +1,15 @@
 package com.example.weatherprogranv2;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +22,9 @@ public class SecondActivity extends AppCompatActivity {
 
     boolean wind, pressure, wet;
     String city_name;
+    TextView wetL, tempL;
+    SensorManager sm;
+    Sensor wetSensor, tempSensor;
 
 
 
@@ -47,7 +56,6 @@ public class SecondActivity extends AppCompatActivity {
 
         city_name = parcel.getCity();
 
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -57,6 +65,25 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+        View header = navigationView.getHeaderView(0);
+        wetL = header.findViewById(R.id.val_self_wet);
+        tempL = header.findViewById(R.id.val_self_temperature);
+
+        sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        wetSensor = sm.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+        tempSensor = sm.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+
+        if (wetSensor != null) {
+            sm.registerListener(wetSensorListenet, wetSensor, 30000);
+        } else {
+            wetL.setText(R.string.no_sensor);
+        }
+
+        if (tempSensor != null) {
+            sm.registerListener(tempSensorListenet, tempSensor, 30000);
+        } else {
+            tempL.setText(R.string.no_sensor);
+        }
     }
 
     public void send(int id){
@@ -116,6 +143,34 @@ public class SecondActivity extends AppCompatActivity {
             ft.replace(R.id.topPanel_info3, fch);
             ft.commit();
         }
+
+        SensorEventListener wetSensorListenet = new SensorEventListener(){
+
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                wetL.setText(String.valueOf(event.values[0]));
+                sm.unregisterListener(wetSensorListenet, wetSensor);
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
+    SensorEventListener tempSensorListenet = new SensorEventListener(){
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            tempL.setText(String.valueOf(event.values[0]));
+            sm.unregisterListener(tempSensorListenet, tempSensor);
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
 
 
 
