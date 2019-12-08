@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    style="@style/MainTheme"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="О разработчиках"
+            style="@style/MainTitle"
+            ></TextView>
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            style="@style/MainPanelImage"
+            android:src="@drawable/pirate"
+            ></ImageView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_company"
+            style="@style/MainTitle"></TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Разработка ПО для информационных систем"
+            style="@style/MainText"></TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Телефон для связи: 2222222222"
+            style="@style/MainText"></TextView>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="buldog@deneg.net"
+            style="@style/MainText"></TextView>
+    </LinearLayout>
+</LinearLayout>
