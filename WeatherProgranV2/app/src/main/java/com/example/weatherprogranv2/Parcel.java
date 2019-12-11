@@ -11,6 +11,10 @@ public class Parcel implements Serializable {
     boolean wet;
 
 
+
+    double pressureVal;
+
+
     public void setCity(String city) {
         this.city = city;
     }
@@ -50,6 +54,12 @@ public class Parcel implements Serializable {
     public void setWind(boolean wind) {
         this.wind = wind;
     }
+    public double getPressureVal() {
+        return pressureVal;
+    }
 
+    public void setPressureVal(double pressureVal) {
+        this.pressureVal = pressureVal;
+    }
 
 }

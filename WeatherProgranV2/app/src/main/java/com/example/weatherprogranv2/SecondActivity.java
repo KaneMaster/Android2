@@ -2,6 +2,7 @@ package com.example.weatherprogranv2;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,8 +28,16 @@ public class SecondActivity extends AppCompatActivity {
     TextView wetL, tempL;
     SensorManager sm;
     Sensor wetSensor, tempSensor;
+    AsyncTask<String, String, String> task;
 
-
+    @Override
+    protected void onStop() {
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+        sp.edit().putBoolean("wet",wet).commit();
+        sp.edit().putBoolean("pressure",pressure).commit();
+        sp.edit().putBoolean("wind", wind).commit();
+        super.onStop();
+    }
 
     @SuppressLint("StaticFieldLeak")
     @Override
@@ -36,14 +45,22 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_activity);
 
-        wind = true;
-        pressure = true;
-        wet = true;
+        SharedPreferences sp = getPreferences(MODE_PRIVATE);
+
+        wind = sp.getBoolean("wind", true);
+        pressure = sp.getBoolean("pressure", true);
+        wet = sp.getBoolean("wet", true);
 
         Parcel parcel = (Parcel) getIntent().getExtras().getSerializable("INFO");
         parcel.setPressure(pressure);
+        parcel.setPressureVal(0);
         parcel.setWet(wet);
         parcel.setWind(wind);
+
+        Intent intent = new Intent(this, Service_GetDate.class);
+        intent.putExtra("INFO", parcel);
+        startService(intent);
+
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         FragmentCityInfo frag = FragmentCityInfo.create(parcel);
@@ -75,6 +92,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onPause();
         sm.unregisterListener(wetSensorListenet, wetSensor);
         sm.unregisterListener(tempSensorListenet, tempSensor);
+        task.cancel(true);
     }
 
     @Override
@@ -88,42 +106,49 @@ public class SecondActivity extends AppCompatActivity {
         wetL = header.findViewById(R.id.val_self_wet);
 
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        wetSensor = sm.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+        tempSensor = sm.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
-        new AsyncTask<String, String, Integer>(){
+        if (wetSensor != null) {
+            sm.registerListener(wetSensorListenet, wetSensor, 1000);
+        } else {
+            wetL.setText(R.string.no_sensor);
+        }
+        if (tempSensor != null) {
+            sm.registerListener(tempSensorListenet, tempSensor, 1000);
+        } else {
+            tempL.setText(R.string.no_sensor);
+        }
 
-            @Override
-            protected Integer doInBackground(String... strings) {
-                int result;
-                wetSensor = sm.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
-                tempSensor = sm.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
-                if (wetSensor != null) {
-                    sm.registerListener(wetSensorListenet, wetSensor, 1000);
-                    result = 1;
-                } else {
-                    result = 0;
+        task = new AsyncTask<String, String, String>() {
+                @SuppressLint("WrongThread")
+                @Override
+                protected String doInBackground(String... strings) {
+                    while (!Thread.currentThread().isInterrupted()){
+                        onProgressUpdate(" ");
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return null;
                 }
-                result = result << 1;
-                if (tempSensor != null) {
-                    sm.registerListener(tempSensorListenet, tempSensor, 1000);
-                    result = result + 1;
-                } else {
-                    result = result + 0;
-                }
-                return result;
-            }
 
-            @Override
-            protected void onPostExecute(Integer s) {
-                super.onPostExecute(s);
-                if ((s & 1) == 0) {
-                    tempL.setText(R.string.no_sensor);
+                @Override
+                protected void onProgressUpdate(String... values) {
+                    Singleton_Data singleton = Singleton_Data.Create();
+                    Parcel parcel = new Parcel();
+                    parcel.setPressureVal(singleton.getTemperature());
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    FragmentCityPanel frag2 = FragmentCityPanel.create(parcel);
+                    ft.replace(R.id.topPanel_info2, frag2);
+                    ft.commit();
+                    super.onProgressUpdate(values);
                 }
-                s = s >> 1;
-                if ((s & 1) == 0) {
-                    wetL.setText(R.string.no_sensor);
-                }
-            }
-        }.execute("");
+            }.execute("");
+
+
     }
 
     public void send(int id){
@@ -143,6 +168,12 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem mi = menu.getItem(1);
+        mi.setChecked(wind);
+        mi = menu.getItem(2);
+        mi.setChecked(pressure);
+        mi = menu.getItem(3);
+        mi.setChecked(wet);
         return true;
     }
 

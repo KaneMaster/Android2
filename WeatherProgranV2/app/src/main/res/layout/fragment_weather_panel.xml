@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="+35"
         style="@style/WeatherPanelText"
+        android:id="@+id/panel_temp"
 ></TextView>
 </LinearLayout>
 </androidx.cardview.widget.CardView>
