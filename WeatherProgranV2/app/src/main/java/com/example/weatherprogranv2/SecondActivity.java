@@ -1,10 +1,12 @@
 package com.example.weatherprogranv2;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,7 @@ public class SecondActivity extends AppCompatActivity {
 
 
 
+    @SuppressLint("StaticFieldLeak")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,25 +68,62 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sm.unregisterListener(wetSensorListenet, wetSensor);
+        sm.unregisterListener(tempSensorListenet, tempSensor);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
-        wetL = header.findViewById(R.id.val_self_wet);
+
         tempL = header.findViewById(R.id.val_self_temperature);
+        wetL = header.findViewById(R.id.val_self_wet);
 
         sm = (SensorManager)getSystemService(SENSOR_SERVICE);
-        wetSensor = sm.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
-        tempSensor = sm.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
 
-        if (wetSensor != null) {
-            sm.registerListener(wetSensorListenet, wetSensor, 30000);
-        } else {
-            wetL.setText(R.string.no_sensor);
-        }
+        new AsyncTask<String, String, Integer>(){
 
-        if (tempSensor != null) {
-            sm.registerListener(tempSensorListenet, tempSensor, 30000);
-        } else {
-            tempL.setText(R.string.no_sensor);
-        }
+            @Override
+            protected Integer doInBackground(String... strings) {
+                int result;
+                wetSensor = sm.getDefaultSensor(Sensor.TYPE_RELATIVE_HUMIDITY);
+                tempSensor = sm.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE);
+                if (wetSensor != null) {
+                    sm.registerListener(wetSensorListenet, wetSensor, 1000);
+                    result = 1;
+                } else {
+                    result = 0;
+                }
+                result = result << 1;
+                if (tempSensor != null) {
+                    sm.registerListener(tempSensorListenet, tempSensor, 1000);
+                    result = result + 1;
+                } else {
+                    result = result + 0;
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(Integer s) {
+                super.onPostExecute(s);
+                if ((s & 1) == 0) {
+                    tempL.setText(R.string.no_sensor);
+                }
+                s = s >> 1;
+                if ((s & 1) == 0) {
+                    wetL.setText(R.string.no_sensor);
+                }
+            }
+        }.execute("");
     }
 
     public void send(int id){
@@ -149,7 +189,6 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 wetL.setText(String.valueOf(event.values[0]));
-                sm.unregisterListener(wetSensorListenet, wetSensor);
             }
 
             @Override
@@ -163,7 +202,6 @@ public class SecondActivity extends AppCompatActivity {
         @Override
         public void onSensorChanged(SensorEvent event) {
             tempL.setText(String.valueOf(event.values[0]));
-            sm.unregisterListener(tempSensorListenet, tempSensor);
         }
 
         @Override
