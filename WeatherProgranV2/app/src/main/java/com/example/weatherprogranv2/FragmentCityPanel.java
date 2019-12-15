@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,12 @@ public class FragmentCityPanel extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vw = inflater.inflate(R.layout.fragment_weather_panel, container, false);
+        TextView temp_panel = vw.findViewById(R.id.panel_temp);
+        Parcel parcel = getParcel();
+        double temp_val = parcel.getPressureVal();
+        String val = (temp_val > 0)?"+":"";
+        val += String.valueOf(parcel.getPressureVal());
+        temp_panel.setText(val);
         return vw;
     }
 }
