@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,6 +49,14 @@ public class FragmentCharacter extends Fragment {
             vw.findViewById(R.id.label_wind).setVisibility(View.INVISIBLE);
             vw.findViewById(R.id.val_wind).setVisibility(View.INVISIBLE);
         }
+        Singleton_Data sd = Singleton_Data.Create();
+        TextView tv = vw.findViewById(R.id.val_wind);
+        tv.setText(String.valueOf( Math.round(sd.getSpeed()*100) / 100.0) + " " + getString(R.string.val_wind));
+        tv = vw.findViewById(R.id.val_pressure);
+        tv.setText(String.valueOf( Math.round( sd.getPressure() * 75.0062)/100.0) + " " + getString(R.string.val_pressure));
+        tv = vw.findViewById(R.id.val_wet);
+        tv.setText(String.valueOf(sd.getWet()) + " " + getString(R.string.val_wet));
+
         return vw;
     }
 }
