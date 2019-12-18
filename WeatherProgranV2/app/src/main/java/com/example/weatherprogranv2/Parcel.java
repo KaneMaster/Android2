@@ -6,13 +6,11 @@ public class Parcel implements Serializable {
 
     String city;
     int inx;
+
     boolean pressure;
     boolean wind;
     boolean wet;
 
-
-
-    double pressureVal;
 
 
     public void setCity(String city) {
@@ -54,12 +52,6 @@ public class Parcel implements Serializable {
     public void setWind(boolean wind) {
         this.wind = wind;
     }
-    public double getPressureVal() {
-        return pressureVal;
-    }
 
-    public void setPressureVal(double pressureVal) {
-        this.pressureVal = pressureVal;
-    }
 
 }

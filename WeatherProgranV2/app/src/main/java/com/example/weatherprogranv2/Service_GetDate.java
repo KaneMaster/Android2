@@ -7,25 +7,27 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.weatherprogranv2.model.Datum;
+import com.example.weatherprogranv2.model.Weather;
+import com.example.weatherprogranv2.model.WeatherModel;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Timer;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public class Service_GetDate extends Service {
 
     URL url;
     String ApiCode = "c3ffbae64d6548ce95bba096176abe15";
+    Timer timer;
 
 
 
@@ -33,42 +35,50 @@ public class Service_GetDate extends Service {
     public void onCreate() {
         super.onCreate();
         try {
-
-            url =  new URL("https://api.weatherbit.io/v2.0/current?key=" + ApiCode + "&lang=ru&city=");
+            url =  new URL("https://api.weatherbit.io");
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
+
+    interface WeatherAPI{
+        @GET ("v2.0/current")
+        Call<WeatherModel> getWeather( @Query("key") String key, @Query("lang") String lang, @Query("city") String city);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Parcel parcel = (Parcel) intent.getExtras().getSerializable("INFO");
+//        timer = new Timer();
+//        timer.scheduleAtFixedRate(new TimerTask() {
+//            @Override
+//            public void run() {
+                Parcel parcel = (Parcel) intent.getExtras().getSerializable("INFO");
 
-        Request.Builder builder = new Request.Builder();
-        builder.url(url + parcel.getCity());
+                Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
+                Call<WeatherModel> call = retrofit.create(WeatherAPI.class).getWeather(ApiCode, "ru", parcel.getCity());
+                call.enqueue(new Callback<WeatherModel>() {
+                    @Override
+                    public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {
+                        WeatherModel weatherModel = response.body();
+                        Datum datum = weatherModel.getData().get(0);
+                        Singleton_Data progr_data = Singleton_Data.Create();
+                        progr_data.setTemperature(datum.getTemp());
+                        progr_data.setPressure(datum.getPres());
+                        progr_data.setSpeed(datum.getWindSpd());
+                        progr_data.setWet(datum.getRh());
+                        Weather weather = datum.getWeather();
+                        progr_data.setDescription(weather.getDescription());
+                        progr_data.setImg(weather.getIcon());
+                    }
 
-        Request request = builder.build();
-        OkHttpClient client = new OkHttpClient();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.i("Warh!", e.getMessage());
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                try {
-                    JSONObject baseObj = new JSONObject(response.body().string());
-                    JSONArray data = baseObj.getJSONArray("data");
-                    JSONObject tempObj = data.getJSONObject(0);
-                    Singleton_Data progr_data = Singleton_Data.Create();
-                    progr_data.setTemperature(tempObj.getDouble("temp"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                    @Override
+                    public void onFailure(Call<WeatherModel> call, Throwable t) {
+                        Log.i("Wagh!", t.getMessage());
+                    }
+                });
+//            }
+//        }, 100, 10000);
         return super.onStartCommand(intent, flags, startId);
     }
 

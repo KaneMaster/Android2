@@ -21,6 +21,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class SecondActivity extends AppCompatActivity {
 
     boolean wind, pressure, wet;
@@ -29,6 +32,7 @@ public class SecondActivity extends AppCompatActivity {
     SensorManager sm;
     Sensor wetSensor, tempSensor;
     AsyncTask<String, String, String> task;
+    Timer t;
 
     @Override
     protected void onStop() {
@@ -53,7 +57,6 @@ public class SecondActivity extends AppCompatActivity {
 
         Parcel parcel = (Parcel) getIntent().getExtras().getSerializable("INFO");
         parcel.setPressure(pressure);
-        parcel.setPressureVal(0);
         parcel.setWet(wet);
         parcel.setWind(wind);
 
@@ -66,7 +69,7 @@ public class SecondActivity extends AppCompatActivity {
         FragmentCityInfo frag = FragmentCityInfo.create(parcel);
         ft.add(R.id.topPanel_info, frag);
 
-        FragmentCityPanel frag2 = FragmentCityPanel.create(parcel);
+        FragmentCityPanel frag2 = FragmentCityPanel.create();
         ft.add(R.id.topPanel_info2, frag2);
 
         FragmentCharacter frag3 = FragmentCharacter.create(parcel);
@@ -92,7 +95,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onPause();
         sm.unregisterListener(wetSensorListenet, wetSensor);
         sm.unregisterListener(tempSensorListenet, tempSensor);
-        task.cancel(true);
+        t.cancel();
     }
 
     @Override
@@ -120,35 +123,24 @@ public class SecondActivity extends AppCompatActivity {
             tempL.setText(R.string.no_sensor);
         }
 
-        task = new AsyncTask<String, String, String>() {
-                @SuppressLint("WrongThread")
-                @Override
-                protected String doInBackground(String... strings) {
-                    while (!Thread.currentThread().isInterrupted()){
-                        onProgressUpdate(" ");
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    return null;
-                }
+        t = new Timer();
+        t.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Parcel parcel = new Parcel();
+                parcel.setWet(wet);
+                parcel.setWind(wind);
+                parcel.setPressure(pressure);
 
-                @Override
-                protected void onProgressUpdate(String... values) {
-                    Singleton_Data singleton = Singleton_Data.Create();
-                    Parcel parcel = new Parcel();
-                    parcel.setPressureVal(singleton.getTemperature());
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    FragmentCityPanel frag2 = FragmentCityPanel.create(parcel);
-                    ft.replace(R.id.topPanel_info2, frag2);
-                    ft.commit();
-                    super.onProgressUpdate(values);
-                }
-            }.execute("");
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                FragmentCityPanel frag2 = FragmentCityPanel.create();
+                ft.replace(R.id.topPanel_info2, frag2);
 
-
+                FragmentCharacter frag3 = FragmentCharacter.create(parcel);
+                ft.replace(R.id.topPanel_info3, frag3);
+                ft.commit();
+            }
+        }, 100, 500);
     }
 
     public void send(int id){

@@ -3,5 +3,7 @@
     <string-array name="cities">
         <item>Ростов-на-Дону</item>
         <item>Москва</item>
+        <item>Новосибирск</item>
+        <item>Новочеркасск</item>
     </string-array>
 </resources>
