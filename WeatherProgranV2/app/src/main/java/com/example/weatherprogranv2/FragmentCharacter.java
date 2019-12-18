@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class FragmentCharacter extends Fragment {
+
     public static FragmentCharacter create(Parcel parcel){
         FragmentCharacter fragment = new FragmentCharacter();
         Bundle args = new Bundle();
@@ -56,6 +57,8 @@ public class FragmentCharacter extends Fragment {
         tv.setText(String.valueOf( Math.round( sd.getPressure() * 75.0062)/100.0) + " " + getString(R.string.val_pressure));
         tv = vw.findViewById(R.id.val_wet);
         tv.setText(String.valueOf(sd.getWet()) + " " + getString(R.string.val_wet));
+
+
 
         return vw;
     }

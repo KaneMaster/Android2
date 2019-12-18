@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/MainTheme">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        style="@style/MainTitle"
+        android:id="@+id/title2"
+        android:visibility="invisible"
+        android:text="Последняя зафиксированная информация о погоде"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Город 1"
+        app:layout_constraintTop_toBottomOf="@+id/title2"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/city1"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Город 2"
+        app:layout_constraintTop_toBottomOf="@+id/city1"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/city2"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Город 3"
+        app:layout_constraintTop_toBottomOf="@+id/city2"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/city3"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Температура 1"
+        app:layout_constraintTop_toBottomOf="@+id/title2"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/temp1"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Температура 2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temp1"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/temp2"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Температура 3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temp2"
+        tools:ignore="MissingConstraints"
+        android:id="@+id/temp3"
+        android:visibility="invisible"
+        style="@style/MainText"></TextView>
+</androidx.constraintlayout.widget.ConstraintLayout>

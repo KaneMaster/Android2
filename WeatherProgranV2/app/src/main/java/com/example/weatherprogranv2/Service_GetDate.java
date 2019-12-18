@@ -7,12 +7,15 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.weatherprogranv2.bd.DataSource;
 import com.example.weatherprogranv2.model.Datum;
 import com.example.weatherprogranv2.model.Weather;
 import com.example.weatherprogranv2.model.WeatherModel;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Timer;
 
 import retrofit2.Call;
@@ -28,7 +31,7 @@ public class Service_GetDate extends Service {
     URL url;
     String ApiCode = "c3ffbae64d6548ce95bba096176abe15";
     Timer timer;
-
+    private DataSource datasource;
 
 
     @Override
@@ -53,13 +56,20 @@ public class Service_GetDate extends Service {
 //        timer.scheduleAtFixedRate(new TimerTask() {
 //            @Override
 //            public void run() {
-                Parcel parcel = (Parcel) intent.getExtras().getSerializable("INFO");
+        datasource = new DataSource(this);
+        try {
+            datasource.open();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Parcel parcel = (Parcel) intent.getExtras().getSerializable("INFO");
 
                 Retrofit retrofit = new Retrofit.Builder().baseUrl(url).addConverterFactory(GsonConverterFactory.create()).build();
                 Call<WeatherModel> call = retrofit.create(WeatherAPI.class).getWeather(ApiCode, "ru", parcel.getCity());
                 call.enqueue(new Callback<WeatherModel>() {
                     @Override
                     public void onResponse(Call<WeatherModel> call, Response<WeatherModel> response) {
+
                         WeatherModel weatherModel = response.body();
                         Datum datum = weatherModel.getData().get(0);
                         Singleton_Data progr_data = Singleton_Data.Create();
@@ -70,6 +80,12 @@ public class Service_GetDate extends Service {
                         Weather weather = datum.getWeather();
                         progr_data.setDescription(weather.getDescription());
                         progr_data.setImg(weather.getIcon());
+                        datasource.add(parcel.getCity(), String.valueOf(progr_data.getTemperature() ));
+                        try {
+                            datasource.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -79,6 +95,7 @@ public class Service_GetDate extends Service {
                 });
 //            }
 //        }, 100, 10000);
+
         return super.onStartCommand(intent, flags, startId);
     }
 
