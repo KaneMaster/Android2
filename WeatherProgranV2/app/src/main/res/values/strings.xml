@@ -21,4 +21,10 @@
     <string name="creator1_email">e_mail: big_boss@mail.ru</string>
     <string name="about_company">ОАО \"Веселый роджер\"</string>
     <string name="no_sensor">Датчик отсутствует</string>
+    <string name="cbGeoloc">Определить гороад по геолокации</string>
+    <string name="button_accept">Применить</string>
+    <string name="Warning_geoloc">Вы не можете определить город по геолокации не предоставив необходимые разрешения</string>
+    <string name="city_label1">Получение данных по координатам</string>
+    <string name="city_label2">Город</string>
+    <string name="Warning_city">Город с данным названием отсутствует.</string>
 </resources>

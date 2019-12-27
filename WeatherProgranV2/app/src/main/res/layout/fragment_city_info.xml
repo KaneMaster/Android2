@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:text="@string/city_label"
         android:textAlignment="center"
+        android:id="@+id/city_name_label"
         style="@style/SubTitle">
     </TextView>
     <TextView

@@ -43,7 +43,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    @SuppressLint("StaticFieldLeak")
+    @SuppressLint({"StaticFieldLeak", "WrongConstant"})
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +65,11 @@ public class SecondActivity extends AppCompatActivity {
         startService(intent);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
+        Singleton_Data sd = Singleton_Data.Create();
+        if (sd.isNonData()){
+            finish();
+        }
 
         FragmentCityInfo frag = FragmentCityInfo.create(parcel);
         ft.add(R.id.topPanel_info, frag);
@@ -127,6 +132,11 @@ public class SecondActivity extends AppCompatActivity {
         t.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                Singleton_Data sd = Singleton_Data.Create();
+                if (sd.isNonData()){
+                    finish();
+                }
+
                 Parcel parcel = new Parcel();
                 parcel.setWet(wet);
                 parcel.setWind(wind);

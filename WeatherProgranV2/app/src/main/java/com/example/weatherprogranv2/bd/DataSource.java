@@ -34,16 +34,18 @@ public class DataSource implements Closeable {
         reader.close();
     }
 
-    public Note add(String city, String weather){
+    public Note add(String city){
         Note note = new Note();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DataHelper.TABLE_CITY, city);
-        contentValues.put(DataHelper.TABLE_WEATHER, weather);
-        long id = database.insert(DataHelper.TABLE_NAME, null, contentValues);
-        note.setId(id);
-        note.setTemp(weather);
-        note.setCity(city);
-        return note;
+        boolean hasCity = reader.findCity(city);
+        long id = 0;
+        if (!hasCity){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DataHelper.TABLE_CITY, city);
+            id = database.insert(DataHelper.TABLE_NAME, null, contentValues);
+            note.setId(id);
+            note.setCity(city);
+        }
+        return  (id != 0) ? note : null;
     }
 
     public DataReader getReader() {

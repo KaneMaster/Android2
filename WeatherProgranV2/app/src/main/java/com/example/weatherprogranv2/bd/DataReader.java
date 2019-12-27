@@ -11,8 +11,7 @@ public class DataReader implements Closeable {
     private Cursor cursor;
     private String[] allColumns = {
             DataHelper.TABLE_ID,
-            DataHelper.TABLE_CITY,
-            DataHelper.TABLE_WEATHER
+            DataHelper.TABLE_CITY
     };
 
 
@@ -29,6 +28,14 @@ public class DataReader implements Closeable {
        cursor = database.query(DataHelper.TABLE_NAME, allColumns, null,null, null, null, DataHelper.TABLE_ID + " desc");
     }
 
+    public boolean findCity(String city){
+        Cursor cursor2 = database.query(DataHelper.TABLE_NAME, new String[]{ DataHelper.TABLE_CITY}, DataHelper.TABLE_CITY + " = ?" , new String[]{city}, null, null, DataHelper.TABLE_ID + " desc");
+        int cnt = cursor2.getCount();
+        cursor2.close();
+        return (cnt > 0)?true: false;
+    }
+
+
     @Override
     public void close() throws IOException {
         cursor.close();
@@ -38,7 +45,6 @@ public class DataReader implements Closeable {
         Note note = new Note();
         note.setId(cursor.getLong(0));
         note.setCity(cursor.getString(1));
-        note.setTemp(cursor.getString(2));
         return note;
     }
 
@@ -49,5 +55,9 @@ public class DataReader implements Closeable {
 
     public int getCount(){
         return cursor.getCount();
+    }
+
+    public int getCountTop10(){
+        return (cursor.getCount() > 10) ? 10 : cursor.getCount();
     }
 }

@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 public class Parcel implements Serializable {
 
+
+
     String city;
+
+
+
+    Boolean coord;
     int inx;
 
     boolean pressure;
     boolean wind;
     boolean wet;
-
 
 
     public void setCity(String city) {
@@ -53,5 +58,11 @@ public class Parcel implements Serializable {
         this.wind = wind;
     }
 
+    public void setCoord(Boolean coord) {
+        this.coord = coord;
+    }
 
+    public Boolean getCoord() {
+        return coord;
+    }
 }

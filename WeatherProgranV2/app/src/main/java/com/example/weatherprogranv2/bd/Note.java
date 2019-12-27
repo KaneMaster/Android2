@@ -4,7 +4,6 @@ public class Note {
 
     private long id;
     private String city;
-    private String temp;
 
     public void setId(long id) {
         this.id = id;
@@ -12,10 +11,6 @@ public class Note {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public void setTemp(String temp) {
-        this.temp = temp;
     }
 
     public long getId() {
@@ -26,7 +21,4 @@ public class Note {
         return city;
     }
 
-    public String getTemp() {
-        return temp;
-    }
 }

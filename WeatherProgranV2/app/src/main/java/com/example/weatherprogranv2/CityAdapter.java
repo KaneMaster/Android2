@@ -1,6 +1,5 @@
 package com.example.weatherprogranv2;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
     }
 
     String [] data;
-    Context ctx;
 
 
     @NonNull
@@ -41,8 +39,12 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> {
                 Intent itn = new Intent();
                 itn.setClass( view.getContext(), SecondActivity.class);
                 Parcel p = new Parcel();
+                p.setCoord(false);
                 p.setCity(city);
                 p.setInx(Arrays.asList(data).indexOf(city));
+                Singleton_Data sd = Singleton_Data.Create();
+                sd.setCityName(city);
+                sd.setCoord(false);
                 itn.putExtra("INFO", p);
                 view.getContext().startActivity(itn);
             }
