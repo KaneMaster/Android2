@@ -28,8 +28,19 @@ public class FragmentCityInfo extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View vw = inflater.inflate(R.layout.fragment_city_info, container, false);
         TextView tv = vw.findViewById(R.id.city_name);
+        TextView lab = vw.findViewById(R.id.city_name_label);
         Parcel parcel = getParcel();
-        tv.setText(parcel.getCity());
+        if (parcel.getCoord()){
+            Singleton_Data sd = Singleton_Data.Create();
+            lab.setText(getResources().getString(R.string.city_label1));
+            tv.setText(new StringBuilder().append("Ширина: ").append(sd.getLat()).append(" Долгота: ").append(sd.getLon()).toString());
+            tv.setVisibility(View.VISIBLE);
+        } else {
+            lab.setText(getResources().getString(R.string.city_label2));
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(parcel.getCity());
+        }
+
         return vw;
     }
 }

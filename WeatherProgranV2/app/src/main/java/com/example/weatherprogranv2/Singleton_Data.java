@@ -11,6 +11,14 @@ public class Singleton_Data {
     private String img;
     private String cityName;
 
+
+
+    private boolean nonData;
+
+
+    private boolean coord;
+    private double lat, lon;
+
     public static Singleton_Data Create(){
         if (Singleton_Data.obj == null){
             Singleton_Data.obj = new Singleton_Data();
@@ -21,6 +29,10 @@ public class Singleton_Data {
             Singleton_Data.obj.description = "";
             Singleton_Data.obj.img = "";
             Singleton_Data.obj.cityName = "Moscow";
+            Singleton_Data.obj.coord = false;
+            Singleton_Data.obj.lat = 0;
+            Singleton_Data.obj.lon = 0;
+            Singleton_Data.obj.nonData = false;
         }
         return  Singleton_Data.obj;
     }
@@ -80,6 +92,36 @@ public class Singleton_Data {
         this.cityName = cityName;
     }
 
+    public boolean isCoord() {
+        return coord;
+    }
 
+    public double getLat() {
+        return lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setCoord(boolean coord) {
+        this.coord = coord;
+    }
+
+    public void setLat(double lat) {
+        this.lat = Math.round(lat * 100) / 100.0;
+    }
+
+    public void setLon(double lon) {
+        this.lon = Math.round(lon * 100) / 100.0;
+    }
+
+    public boolean isNonData() {
+        return nonData;
+    }
+
+    public void setNonData(boolean nonData) {
+        this.nonData = nonData;
+    }
 
 }

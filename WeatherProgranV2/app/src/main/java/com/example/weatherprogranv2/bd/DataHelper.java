@@ -9,11 +9,11 @@ import androidx.annotation.Nullable;
 public class DataHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "notes.db";
-    private static final int DB_VERSION = 2;
-    public static final String TABLE_NAME = "notes";
+    private static final int DB_VERSION = 3;
+    public static final String TABLE_NAME = "city";
     public static final String TABLE_ID = "id";
-    public static final String TABLE_CITY = "city";
-    public static final String TABLE_WEATHER = "weather";
+    public static final String TABLE_CITY = "cities";
+
 
 
     public DataHelper(@Nullable Context context){
@@ -23,7 +23,7 @@ public class DataHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME + " ( "+
-                TABLE_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+TABLE_CITY+" TEXT, "+TABLE_WEATHER+" TEXT );");
+                TABLE_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+TABLE_CITY+" TEXT );");
     }
 
     @Override
